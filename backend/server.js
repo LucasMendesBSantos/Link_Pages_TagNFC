@@ -4,6 +4,7 @@ const express = require('express')
 const cors = require('cors')
 const fs = require('fs')
 const path = require('path')
+const { randomUUID } = require('crypto')
 
 const app = express()
 app.use(cors())
@@ -44,7 +45,7 @@ app.post('/api/register', (req, res) => {
   }
 
   const visitor = {
-    id: crypto.randomUUID(),
+    id: randomUUID(),
     name: name.trim(),
     company: company.trim(),
     visitedAt: new Date().toISOString(),
@@ -66,7 +67,7 @@ app.post('/api/track', (req, res) => {
   }
 
   const event = {
-    id: crypto.randomUUID(),
+    id: randomUUID(),
     visitorName: visitorName.trim(),
     visitorCompany: visitorCompany?.trim() ?? '',
     action,
@@ -89,6 +90,11 @@ app.get('/api/secret/data', (req, res) => {
     pdfView: events.filter(e => e.action === 'pdf_view'),
     pdfDownload: events.filter(e => e.action === 'pdf_download'),
   })
+})
+
+app.use((err, req, res, next) => {
+  console.error(err)
+  res.status(500).json({ error: 'Erro interno do servidor' })
 })
 
 if (require.main === module) {
