@@ -1,0 +1,107 @@
+/* ── Camada raiz: cobre toda a tela por baixo de tudo ── */
+.water-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+}
+
+/* ── Gradiente de fundo animado ── */
+.water-bg__gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    168deg,
+    var(--deep-ocean)    0%,
+    var(--ocean-mid)    45%,
+    var(--ocean-shallow) 85%,
+    #0b7a99             100%
+  );
+  animation: gradientDrift 14s ease-in-out infinite alternate;
+}
+
+@keyframes gradientDrift {
+  0%   { filter: hue-rotate(0deg)   brightness(1);    }
+  50%  { filter: hue-rotate(-8deg)  brightness(0.92); }
+  100% { filter: hue-rotate(6deg)   brightness(1.06); }
+}
+
+/* ── Luz cáustica (reflexo de luz na água) ── */
+.water-bg__caustics {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 40% at 25% 35%, rgba(0,212,255,0.06) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 55% at 75% 60%, rgba(0,150,200,0.05) 0%, transparent 70%);
+  animation: causticShift 18s ease-in-out infinite alternate;
+}
+
+@keyframes causticShift {
+  0%   { transform: scale(1)    translateX(0)     translateY(0);    opacity: 1;    }
+  33%  { transform: scale(1.1)  translateX(-3%)   translateY(2%);   opacity: 0.8;  }
+  66%  { transform: scale(0.95) translateX(4%)    translateY(-2%);  opacity: 1;    }
+  100% { transform: scale(1.05) translateX(-2%)   translateY(3%);   opacity: 0.9;  }
+}
+
+/* ── Bolhas ── */
+.water-bg__bubbles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.bubble {
+  position: absolute;
+  bottom: -80px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.38),
+    rgba(0, 212, 255, 0.06)
+  );
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(2px);
+  animation: bubbleRise linear infinite;
+}
+
+@keyframes bubbleRise {
+  0%   { transform: translateY(0)       translateX(0)   scale(1);    opacity: 0;   }
+  8%   {                                                               opacity: 0.65; }
+  50%  { transform: translateY(-55vh)   translateX(12px) scale(0.92); }
+  92%  {                                                               opacity: 0.3; }
+  100% { transform: translateY(-115vh)  translateX(-8px) scale(0.75); opacity: 0;   }
+}
+
+/* ── Ondas SVG ── */
+.water-bg__waves {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 22vh;
+  min-height: 110px;
+  overflow: hidden;
+}
+
+.wave-svg {
+  position: absolute;
+  bottom: 0;
+  width: 200%;
+  height: 100%;
+}
+
+/* Cada <use> tem velocidade e delay diferentes → efeito parallax */
+.wave-parallax > use {
+  animation: waveDrift cubic-bezier(0.55, 0.5, 0.45, 0.5) infinite;
+}
+
+.wave-parallax > use:nth-child(1) { animation-delay: -2s;  animation-duration: 7s;  }
+.wave-parallax > use:nth-child(2) { animation-delay: -3s;  animation-duration: 10s; }
+.wave-parallax > use:nth-child(3) { animation-delay: -4s;  animation-duration: 13s; }
+.wave-parallax > use:nth-child(4) { animation-delay: -5s;  animation-duration: 20s; }
+
+@keyframes waveDrift {
+  0%   { transform: translate3d(-90px, 0, 0); }
+  100% { transform: translate3d(85px,  0, 0); }
+}

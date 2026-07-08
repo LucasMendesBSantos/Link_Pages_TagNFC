@@ -1,0 +1,136 @@
+/* ── Layout de página ── */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 28px 16px 60px;
+  position: relative;
+}
+
+/* ── Card central (glassmorphism) ── */
+.card {
+  width: 100%;
+  max-width: 440px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 26px;
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+  overflow: hidden;
+  animation: cardEntrance 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cardEntrance {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Cabeçalho do card ── */
+.card__header {
+  padding: 38px 28px 26px;
+  text-align: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.card__avatar {
+  width: 82px;
+  height: 82px;
+  border-radius: 50%;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 212, 255, 0.28) 0%,
+    rgba(0, 80, 140, 0.50) 100%
+  );
+  border: 2px solid rgba(0, 212, 255, 0.38);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px;
+  animation: avatarGlow 3.5s ease-in-out infinite;
+}
+
+@keyframes avatarGlow {
+  0%,  100% { box-shadow: 0 0 18px rgba(0, 212, 255, 0.22); }
+  50%        { box-shadow: 0 0 36px rgba(0, 212, 255, 0.50); }
+}
+
+.card__avatar-icon {
+  font-size: 38px;
+  line-height: 1;
+}
+
+.card__name {
+  font-size: 26px;
+  font-weight: 700;
+  color: #e8f4fd;
+  margin: 0 0 7px;
+  letter-spacing: -0.4px;
+}
+
+.card__tagline {
+  font-size: 14px;
+  color: var(--text-muted);
+  letter-spacing: 0.5px;
+}
+
+/* ── Área de links ── */
+.card__links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px 18px 24px;
+  list-style: none;
+}
+
+/* ── Rodapé ── */
+.footer {
+  margin-top: 26px;
+  font-size: 12px;
+  color: rgba(200, 230, 255, 0.30);
+  letter-spacing: 0.3px;
+}
+
+/* ── Bloqueio de conteúdo enquanto modal está aberto ── */
+.card,
+.footer {
+  transition: filter 0.4s ease, opacity 0.4s ease;
+}
+
+.page--locked .card,
+.page--locked .footer {
+  filter: blur(7px);
+  opacity: 0.5;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ── Responsividade ── */
+@media (max-width: 480px) {
+  .card {
+    border-radius: 20px;
+  }
+
+  .card__header {
+    padding: 28px 20px 22px;
+  }
+
+  .card__links {
+    padding: 16px 14px 20px;
+    gap: 8px;
+  }
+
+  .card__name {
+    font-size: 22px;
+  }
+}

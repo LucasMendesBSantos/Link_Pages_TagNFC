@@ -1,0 +1,181 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 16, 30, 0.72);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: overlayIn 0.35s ease;
+  padding: 1rem;
+}
+
+@keyframes overlayIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.modal-card {
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  border-radius: 24px;
+  padding: 2.5rem 2rem;
+  width: 100%;
+  max-width: 420px;
+  animation: cardIn 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: center;
+  box-shadow:
+    0 8px 40px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.10);
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: scale(0.82) translateY(32px); }
+  to   { opacity: 1; transform: scale(1)    translateY(0);    }
+}
+
+.modal-avatar {
+  font-size: 3.2rem;
+  margin-bottom: 0.75rem;
+  filter: drop-shadow(0 0 18px rgba(0, 212, 255, 0.65));
+  animation: avatarPulse 3.5s ease-in-out infinite;
+  display: block;
+}
+
+@keyframes avatarPulse {
+  0%, 100% { filter: drop-shadow(0 0 18px rgba(0, 212, 255, 0.55)); }
+  50%       { filter: drop-shadow(0 0 32px rgba(0, 212, 255, 0.90)); }
+}
+
+.modal-title {
+  color: #00d4ff;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin: 0 0 0.4rem;
+  letter-spacing: -0.3px;
+}
+
+.modal-subtitle {
+  color: rgba(200, 230, 255, 0.65);
+  font-size: 0.95rem;
+  margin: 0 0 1.75rem;
+}
+
+.modal-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  text-align: left;
+}
+
+.modal-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.modal-label {
+  color: rgba(200, 230, 255, 0.75);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding-left: 0.25rem;
+}
+
+.modal-input {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.13);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  color: #e8f4fd;
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.modal-input:focus {
+  border-color: #00d4ff;
+  background: rgba(0, 212, 255, 0.06);
+  box-shadow: 0 0 0 3px rgba(0, 212, 255, 0.12);
+}
+
+.modal-input::placeholder {
+  color: rgba(200, 230, 255, 0.32);
+}
+
+.modal-input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.modal-error {
+  color: #ff8080;
+  font-size: 0.88rem;
+  text-align: center;
+  margin: 0;
+  padding: 0.5rem 0.75rem;
+  background: rgba(255, 100, 100, 0.10);
+  border-radius: 8px;
+  border: 1px solid rgba(255, 100, 100, 0.22);
+}
+
+.modal-submit {
+  position: relative;
+  overflow: hidden;
+  background: transparent;
+  border: 1.5px solid #00d4ff;
+  border-radius: 12px;
+  padding: 0.85rem 1rem;
+  color: #00d4ff;
+  font-size: 1rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: color 0.28s;
+  margin-top: 0.25rem;
+  letter-spacing: 0.03em;
+}
+
+.modal-submit::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: #00d4ff;
+  transform: scaleY(0);
+  transform-origin: bottom;
+  transition: transform 0.28s ease;
+  z-index: 0;
+}
+
+.modal-submit:hover:not(:disabled)::before {
+  transform: scaleY(1);
+}
+
+.modal-submit:hover:not(:disabled) {
+  color: #04101e;
+}
+
+.modal-submit span {
+  position: relative;
+  z-index: 1;
+}
+
+.modal-submit:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+@media (max-width: 480px) {
+  .modal-card {
+    padding: 2rem 1.5rem;
+  }
+  .modal-title {
+    font-size: 1.45rem;
+  }
+}
