@@ -9,23 +9,30 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-const DATA_DIR = path.join(__dirname, 'data')
+// Em produção (Vercel), apenas /tmp permite escrita. Em desenvolvimento, usa a pasta local.
+const DATA_DIR = process.env.NODE_ENV === 'production'
+  ? '/tmp/nfc-data'
+  : path.join(__dirname, 'data')
+
 const VISITORS_FILE = path.join(DATA_DIR, 'visitors.json')
 const EVENTS_FILE = path.join(DATA_DIR, 'events.json')
 
-if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true })
-if (!fs.existsSync(VISITORS_FILE)) fs.writeFileSync(VISITORS_FILE, '[]')
-if (!fs.existsSync(EVENTS_FILE)) fs.writeFileSync(EVENTS_FILE, '[]')
+function ensureFiles() {
+  if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true })
+  if (!fs.existsSync(VISITORS_FILE)) fs.writeFileSync(VISITORS_FILE, '[]')
+  if (!fs.existsSync(EVENTS_FILE)) fs.writeFileSync(EVENTS_FILE, '[]')
+}
 
 function readJSON(file) {
+  ensureFiles()
   return JSON.parse(fs.readFileSync(file, 'utf8'))
 }
 
 function writeJSON(file, data) {
+  ensureFiles()
   fs.writeFileSync(file, JSON.stringify(data, null, 2))
 }
 
-// Registra um novo visitante
 app.post('/api/register', (req, res) => {
   const { name, company } = req.body
   if (!name?.trim() || !company?.trim()) {
@@ -46,7 +53,6 @@ app.post('/api/register', (req, res) => {
   res.json({ success: true, visitor })
 })
 
-// Registra uma ação do visitante
 app.post('/api/track', (req, res) => {
   const { visitorName, visitorCompany, action } = req.body
   const validActions = ['sgg_access', 'curriculo_access', 'pdf_view', 'pdf_download']
@@ -70,7 +76,6 @@ app.post('/api/track', (req, res) => {
   res.json({ success: true })
 })
 
-// Retorna dados para a página secreta
 app.get('/api/secret/data', (req, res) => {
   const events = readJSON(EVENTS_FILE)
 
@@ -82,7 +87,9 @@ app.get('/api/secret/data', (req, res) => {
   })
 })
 
-const PORT = process.env.PORT || 3001
-app.listen(PORT, () => {
-  console.log(`Backend rodando em http://localhost:${PORT}`)
-})
+if (require.main === module) {
+  const PORT = process.env.PORT || 3001
+  app.listen(PORT, () => console.log(`Backend rodando em http://localhost:${PORT}`))
+}
+
+module.exports = app
