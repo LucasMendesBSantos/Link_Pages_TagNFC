@@ -137,24 +137,40 @@
   font-weight: 600;
   font-family: inherit;
   cursor: pointer;
-  transition: color 0.28s;
+  transition: color 0.3s ease 0.35s;
   margin-top: 0.25rem;
   letter-spacing: 0.03em;
 }
 
+/*
+  Bloco único que sobe de baixo para cima.
+  Os 24 px extras no topo contêm a onda SVG (transparente acima da linha da onda).
+  O restante é preenchimento sólido.
+  translateY(100%) = vazio | translateY(0%) = cheio.
+*/
 .modal-submit::before {
   content: '';
   position: absolute;
-  inset: 0;
-  background: #00d4ff;
-  transform: scaleY(0);
-  transform-origin: bottom;
-  transition: transform 0.28s ease;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: calc(100% + 24px);
+
+  background-image:
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 24'%3E%3Cpath d='M0,12 C25,2 75,22 100,12 C125,2 175,22 200,12 L200,24 L0,24 Z' fill='%2300d4ff'/%3E%3C/svg%3E"),
+    linear-gradient(#00d4ff, #00d4ff);
+  background-size: 200px 24px, 100% calc(100% - 24px);
+  background-position: 0 0, 0 24px;
+  background-repeat: repeat-x, no-repeat;
+
+  transform: translateY(100%);
+  transition: transform 0.75s cubic-bezier(0.33, 1, 0.68, 1);
   z-index: 0;
+  animation: waveFlow 2s linear infinite;
 }
 
 .modal-submit:hover:not(:disabled)::before {
-  transform: scaleY(1);
+  transform: translateY(0%);
 }
 
 .modal-submit:hover:not(:disabled) {
@@ -169,6 +185,11 @@
 .modal-submit:disabled {
   opacity: 0.55;
   cursor: not-allowed;
+}
+
+@keyframes waveFlow {
+  from { background-position: 0    0, 0 24px; }
+  to   { background-position: 200px 0, 0 24px; }
 }
 
 @media (max-width: 480px) {
