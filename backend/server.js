@@ -33,6 +33,10 @@ function writeJSON(file, data) {
   fs.writeFileSync(file, JSON.stringify(data, null, 2))
 }
 
+app.get('/', (req, res) => {
+  res.send('Frontend esta ok')
+})
+
 app.post('/api/register', (req, res) => {
   const { name, company } = req.body
   if (!name?.trim() || !company?.trim()) {
