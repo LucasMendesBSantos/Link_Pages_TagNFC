@@ -101,7 +101,7 @@ export default function SecretPage() {
             <AccessTable
               title="Visitantes Registrados"
               icon="👤"
-              entries={data.visitors}
+              entries={data.visitors ?? []}
               emptyMsg="Nenhum visitante registrado ainda."
             />
             <AccessTable

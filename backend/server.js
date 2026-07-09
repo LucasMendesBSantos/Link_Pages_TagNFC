@@ -35,7 +35,7 @@ function writeJSON(file, data) {
 }
 
 app.get('/', (req, res) => {
-  res.send('Frontend esta ok')
+  res.json({ status: 'ok', message: 'API Garrafão Rosa D\'água online' })
 })
 
 app.post('/api/register', (req, res) => {
