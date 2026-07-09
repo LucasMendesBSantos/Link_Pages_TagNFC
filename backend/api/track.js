@@ -1,4 +1,4 @@
-const supabase = require('../lib/supabase')
+const { getClient } = require('../lib/supabase')
 
 const VALID_ACTIONS = ['sgg_access', 'curriculo_access', 'pdf_view', 'pdf_download']
 
@@ -18,6 +18,7 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Dados inválidos' })
     }
 
+    const supabase = getClient()
     const { error } = await supabase
       .from('events')
       .insert({
@@ -31,6 +32,6 @@ module.exports = async (req, res) => {
     return res.status(200).json({ success: true })
   } catch (err) {
     console.error(err)
-    return res.status(500).json({ error: 'Erro interno do servidor' })
+    return res.status(500).json({ error: err.message || 'Erro interno do servidor' })
   }
 }

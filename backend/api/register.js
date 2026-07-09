@@ -1,4 +1,4 @@
-const supabase = require('../lib/supabase')
+const { getClient } = require('../lib/supabase')
 
 function cors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -16,6 +16,7 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Nome e empresa são obrigatórios' })
     }
 
+    const supabase = getClient()
     const { data, error } = await supabase
       .from('visitors')
       .insert({ name: name.trim(), company: company.trim() })
@@ -27,6 +28,6 @@ module.exports = async (req, res) => {
     return res.status(200).json({ success: true, visitor: data })
   } catch (err) {
     console.error(err)
-    return res.status(500).json({ error: 'Erro interno do servidor' })
+    return res.status(500).json({ error: err.message || 'Erro interno do servidor' })
   }
 }

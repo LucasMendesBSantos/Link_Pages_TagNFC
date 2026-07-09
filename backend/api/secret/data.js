@@ -1,4 +1,4 @@
-const supabase = require('../../lib/supabase')
+const { getClient } = require('../../lib/supabase')
 
 function cors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -11,6 +11,8 @@ module.exports = async (req, res) => {
   if (req.method === 'OPTIONS') return res.status(204).end()
 
   try {
+    const supabase = getClient()
+
     const [{ data: visitors, error: ve }, { data: events, error: ee }] = await Promise.all([
       supabase.from('visitors').select('*').order('visited_at', { ascending: false }),
       supabase.from('events').select('*').order('timestamp', { ascending: false }),
@@ -34,13 +36,13 @@ module.exports = async (req, res) => {
         visitorCompany: v.company,
         timestamp: v.visited_at,
       })),
-      sggAccess:      events.filter(e => e.action === 'sgg_access').map(toEntry),
+      sggAccess:       events.filter(e => e.action === 'sgg_access').map(toEntry),
       curriculoAccess: events.filter(e => e.action === 'curriculo_access').map(toEntry),
-      pdfView:        events.filter(e => e.action === 'pdf_view').map(toEntry),
-      pdfDownload:    events.filter(e => e.action === 'pdf_download').map(toEntry),
+      pdfView:         events.filter(e => e.action === 'pdf_view').map(toEntry),
+      pdfDownload:     events.filter(e => e.action === 'pdf_download').map(toEntry),
     })
   } catch (err) {
     console.error(err)
-    return res.status(500).json({ error: 'Erro interno do servidor' })
+    return res.status(500).json({ error: err.message || 'Erro interno do servidor' })
   }
 }
