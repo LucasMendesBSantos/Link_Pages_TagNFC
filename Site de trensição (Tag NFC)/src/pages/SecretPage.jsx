@@ -99,6 +99,12 @@ export default function SecretPage() {
         {data && (
           <div className="secret-sections">
             <AccessTable
+              title="Visitantes Registrados"
+              icon="👤"
+              entries={data.visitors}
+              emptyMsg="Nenhum visitante registrado ainda."
+            />
+            <AccessTable
               title="Programa SGG"
               icon="🚀"
               entries={data.sggAccess}

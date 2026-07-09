@@ -1,4 +1,4 @@
-const { EVENTS_FILE, readJSON } = require('../../lib/storage')
+const supabase = require('../../lib/supabase')
 
 function cors(res) {
   res.setHeader('Access-Control-Allow-Origin', '*')
@@ -6,17 +6,38 @@ function cors(res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
 }
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   cors(res)
   if (req.method === 'OPTIONS') return res.status(204).end()
 
   try {
-    const events = readJSON(EVENTS_FILE)
+    const [{ data: visitors, error: ve }, { data: events, error: ee }] = await Promise.all([
+      supabase.from('visitors').select('*').order('visited_at', { ascending: false }),
+      supabase.from('events').select('*').order('timestamp', { ascending: false }),
+    ])
+
+    if (ve) throw ve
+    if (ee) throw ee
+
+    const toEntry = e => ({
+      id: e.id,
+      visitorName: e.visitor_name,
+      visitorCompany: e.visitor_company,
+      action: e.action,
+      timestamp: e.timestamp,
+    })
+
     return res.status(200).json({
-      sggAccess: events.filter(e => e.action === 'sgg_access'),
-      curriculoAccess: events.filter(e => e.action === 'curriculo_access'),
-      pdfView: events.filter(e => e.action === 'pdf_view'),
-      pdfDownload: events.filter(e => e.action === 'pdf_download'),
+      visitors: visitors.map(v => ({
+        id: v.id,
+        visitorName: v.name,
+        visitorCompany: v.company,
+        timestamp: v.visited_at,
+      })),
+      sggAccess:      events.filter(e => e.action === 'sgg_access').map(toEntry),
+      curriculoAccess: events.filter(e => e.action === 'curriculo_access').map(toEntry),
+      pdfView:        events.filter(e => e.action === 'pdf_view').map(toEntry),
+      pdfDownload:    events.filter(e => e.action === 'pdf_download').map(toEntry),
     })
   } catch (err) {
     console.error(err)

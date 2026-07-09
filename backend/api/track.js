@@ -1,5 +1,4 @@
-const { randomUUID } = require('crypto')
-const { EVENTS_FILE, readJSON, writeJSON } = require('../lib/storage')
+const supabase = require('../lib/supabase')
 
 const VALID_ACTIONS = ['sgg_access', 'curriculo_access', 'pdf_view', 'pdf_download']
 
@@ -9,7 +8,7 @@ function cors(res) {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
 }
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
   cors(res)
   if (req.method === 'OPTIONS') return res.status(204).end()
 
@@ -19,17 +18,15 @@ module.exports = (req, res) => {
       return res.status(400).json({ error: 'Dados inválidos' })
     }
 
-    const event = {
-      id: randomUUID(),
-      visitorName: visitorName.trim(),
-      visitorCompany: visitorCompany?.trim() ?? '',
-      action,
-      timestamp: new Date().toISOString(),
-    }
+    const { error } = await supabase
+      .from('events')
+      .insert({
+        visitor_name: visitorName.trim(),
+        visitor_company: visitorCompany?.trim() ?? '',
+        action,
+      })
 
-    const events = readJSON(EVENTS_FILE)
-    events.push(event)
-    writeJSON(EVENTS_FILE, events)
+    if (error) throw error
 
     return res.status(200).json({ success: true })
   } catch (err) {
