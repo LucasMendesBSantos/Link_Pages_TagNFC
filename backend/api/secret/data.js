@@ -1,17 +1,20 @@
-const { getClient } = require('../../lib/supabase')
+const { createClient } = require('@supabase/supabase-js')
 
-function cors(res) {
+module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*')
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS')
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type')
-}
 
-module.exports = async (req, res) => {
-  cors(res)
   if (req.method === 'OPTIONS') return res.status(204).end()
 
   try {
-    const supabase = getClient()
+    const supabaseUrl = process.env.SUPABASE_URL
+    const supabaseKey = process.env.SUPABASE_KEY
+    if (!supabaseUrl || !supabaseKey) {
+      return res.status(500).json({ error: 'Supabase não configurado no servidor' })
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseKey)
 
     const [{ data: visitors, error: ve }, { data: events, error: ee }] = await Promise.all([
       supabase.from('visitors').select('*').order('visited_at', { ascending: false }),
