@@ -8,7 +8,7 @@ import { trackAction }     from './api'
 
 // ─────────────────────────────────────────────────────────────────────────────
 const LINKS = {
-  mainProject:   'https://vercel.com/lucasmendesbsantos-projects/2-apresentacao-leao-tech-front-back-nqg8',
+  mainProject:   'https://2-apresentacao-leao-tech-front-back-nine.vercel.app/',
   virtualResume: 'https://curriculo-online-tech-quim.vercel.app',
 }
 
