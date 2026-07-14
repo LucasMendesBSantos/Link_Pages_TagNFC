@@ -4,7 +4,7 @@ import './PdfSection.css'
 // CONFIGURE O CAMINHO DO SEU PDF AQUI
 // Se o arquivo estiver em /public/curriculo.pdf → use '/curriculo.pdf'
 // Se for uma URL externa → use 'https://exemplo.com/meu-curriculo.pdf'
-const PDF_PATH = '/curriculo.pdf'   // << TROQUE AQUI
+const PDF_PATH = '/Curriculo - Wanderson Honorato Araujo..pdf'
 // ─────────────────────────────────────────────────────────────────────────────
 
 export function PdfSection({ onViewPdf, onDownloadPdf }) {
@@ -14,6 +14,8 @@ export function PdfSection({ onViewPdf, onDownloadPdf }) {
         <span aria-hidden="true">📑</span>
         <span>Currículo em PDF</span>
       </div>
+
+      <p className="pdf-section__owner">Wanderson Honorato Araújo</p>
 
       <div className="pdf-section__actions">
         {/* Ação A — abre o PDF em nova aba */}
