@@ -70,12 +70,6 @@ export default function SecretPage() {
       .finally(() => setLoading(false))
   }, [])
 
-  const pdfEntries = data
-    ? [...data.pdfView, ...data.pdfDownload].sort(
-        (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-      )
-    : []
-
   return (
     <div className="page secret-page">
       <WaterBackground />
@@ -117,11 +111,10 @@ export default function SecretPage() {
               emptyMsg="Nenhum acesso registrado ainda."
             />
             <AccessTable
-              title="Currículo em PDF"
-              icon="📑"
-              entries={pdfEntries}
-              emptyMsg="Nenhuma visualização ou download registrado ainda."
-              showAction
+              title="Currículo Virtual Wanderson"
+              icon="🌐"
+              entries={data.curriculoWandersonAccess ?? []}
+              emptyMsg="Nenhum acesso registrado ainda."
             />
           </div>
         )}

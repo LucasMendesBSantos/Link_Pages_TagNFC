@@ -60,7 +60,7 @@ app.post('/api/register', (req, res) => {
 
 app.post('/api/track', (req, res) => {
   const { visitorName, visitorCompany, action } = req.body
-  const validActions = ['sgg_access', 'curriculo_access', 'pdf_view', 'pdf_download']
+  const validActions = ['sgg_access', 'curriculo_access', 'curriculo_wanderson_access']
 
   if (!visitorName?.trim() || !validActions.includes(action)) {
     return res.status(400).json({ error: 'Dados inválidos' })
@@ -83,12 +83,20 @@ app.post('/api/track', (req, res) => {
 
 app.get('/api/secret/data', (req, res) => {
   const events = readJSON(EVENTS_FILE)
+  const rawVisitors = readJSON(VISITORS_FILE)
+
+  const visitors = rawVisitors.map(v => ({
+    id: v.id,
+    visitorName: v.name,
+    visitorCompany: v.company,
+    timestamp: v.visitedAt,
+  }))
 
   res.json({
+    visitors,
     sggAccess: events.filter(e => e.action === 'sgg_access'),
     curriculoAccess: events.filter(e => e.action === 'curriculo_access'),
-    pdfView: events.filter(e => e.action === 'pdf_view'),
-    pdfDownload: events.filter(e => e.action === 'pdf_download'),
+    curriculoWandersonAccess: events.filter(e => e.action === 'curriculo_wanderson_access'),
   })
 })
 

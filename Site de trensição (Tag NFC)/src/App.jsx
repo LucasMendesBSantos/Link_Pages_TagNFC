@@ -2,14 +2,14 @@ import { useState } from 'react'
 import './App.css'
 import { WaterBackground } from './components/WaterBackground'
 import { LinkButton }      from './components/LinkButton'
-import { PdfSection }      from './components/PdfSection'
 import { RegisterModal }   from './components/RegisterModal'
 import { trackAction }     from './api'
 
 // ─────────────────────────────────────────────────────────────────────────────
 const LINKS = {
-  mainProject:   'https://2-apresentacao-leao-tech-front-back-nine.vercel.app/',
-  virtualResume: 'https://curriculo-online-tech-quim.vercel.app',
+  mainProject:              'https://2-apresentacao-leao-tech-front-back-nine.vercel.app/',
+  virtualResume:            'https://curriculo-online-tech-quim.vercel.app',
+  virtualResumeWanderson:   'https://portfolio-honorato-jw1b.vercel.app/',
 }
 
 const PROFILE = {
@@ -76,11 +76,14 @@ export default function App() {
             Currículo Virtual Lucas Mendes
           </LinkButton>
 
-          {/* Botão 3 — PDF: Visualizar + Baixar */}
-          <PdfSection
-            onViewPdf={() => trackAction('pdf_view')}
-            onDownloadPdf={() => trackAction('pdf_download')}
-          />
+          {/* Botão 3 — Currículo Virtual Wanderson */}
+          <LinkButton
+            href={LINKS.virtualResumeWanderson}
+            icon="🌐"
+            onTrack={() => trackAction('curriculo_wanderson_access')}
+          >
+            Currículo Virtual Wanderson
+          </LinkButton>
         </nav>
       </main>
 
