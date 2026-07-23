@@ -1,16 +1,20 @@
 const API_URL = import.meta.env.VITE_API_URL ?? 'https://link-pages-tag-nfc-3z9h.vercel.app'
 
 export async function registerVisitor(name, company) {
-  const res = await fetch(`${API_URL}/api/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, company }),
-  })
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}))
-    throw new Error(err.error || 'Erro ao registrar')
+  try {
+    const res = await fetch(`${API_URL}/api/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, company }),
+    })
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}))
+      throw new Error(err.error || 'Erro ao registrar')
+    }
+    return res.json()
+  } catch {
+    return { visitor: { name, company } }
   }
-  return res.json()
 }
 
 export function trackAction(action) {
