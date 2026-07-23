@@ -1,4 +1,4 @@
-const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:3001'
+const API_URL = import.meta.env.VITE_API_URL ?? 'https://link-pages-tag-nfc-3z9h.vercel.app'
 
 export async function registerVisitor(name, company) {
   const res = await fetch(`${API_URL}/api/register`, {
